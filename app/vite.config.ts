@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   // Para GitHub Pages: cambia 'base' por '/nombre-de-tu-repo/'
   // Para Netlify/Vercel/Cloudflare Pages: déjalo como '/'
-  base: '/visualizador-arbol/',
+  base: '/visualizador-arbol-aconcagua/',
   test: {
     globals: true,
     environment: 'jsdom',
