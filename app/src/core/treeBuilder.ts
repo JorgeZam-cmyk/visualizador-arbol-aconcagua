@@ -38,25 +38,37 @@ export function findParentCode(
   const hyphens = countHyphens(code);
 
   if (hyphens >= 2) {
-    // Regla 2: Si tiene dos guiones, primero revisar si existe un padre quitando los últimos tres caracteres
-    const suffixParent = code.slice(0, -3);
-    if (codeSet.has(suffixParent)) {
-      return suffixParent;
+    // Buscar el padre existente más cercano.
+    // Si existen varios prefijos posibles, elegir el más largo.
+    const possibleParents = Array.from(codeSet)
+      .filter((candidate) =>
+        candidate !== code &&
+        code.startsWith(candidate)
+      )
+      .sort((a, b) => b.length - a.length);
+
+    if (possibleParents.length > 0) {
+      return possibleParents[0];
     }
-    // Regla 3: Si no aplica regla 2, padre es todo antes del segundo guión
-    const secondHyphenIndex = code.indexOf('-', code.indexOf('-') + 1);
+
+    const secondHyphenIndex = code.indexOf(
+      '-',
+      code.indexOf('-') + 1
+    );
+
     if (secondHyphenIndex !== -1) {
-      const parentBySecondHyphen = code.substring(0, secondHyphenIndex);
+      const parentBySecondHyphen =
+        code.substring(0, secondHyphenIndex);
+
       if (codeSet.has(parentBySecondHyphen)) {
         return parentBySecondHyphen;
       }
-      // Si el padre directo no existe, intentar con reducción de 2 caracteres
+
       return reduceByTwoChars(parentBySecondHyphen, codeSet);
     }
   }
 
   if (hyphens === 1) {
-    // Regla 4: Reducir lado derecho en bloques de 2 caracteres
     return reduceByTwoChars(code, codeSet);
   }
 
